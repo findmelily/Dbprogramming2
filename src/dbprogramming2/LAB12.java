@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 
-public class LAB9 {
+public class LAB12 {
 
     public static void main(String[] args) {
         String URL = "jdbc:mysql://localhost:3306/mydb2";
@@ -18,11 +18,18 @@ public class LAB9 {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection connection = DriverManager.getConnection(URL, username, password);
-            Statement statement = connection.createStatement();
+            
             String sql = "INSERT INTO student(studentID,firstName,lastName,email,deptID)"
-                    + "VALUES('111111','AAAA','BBBB','aaaa@gmail.com','IT')";
-            statement.executeUpdate(sql);
-
+                    + "VALUES(?,?,?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,"111111");
+            preparedStatement.setString(2,"aaaa");
+            preparedStatement.setString(3,"bbbb");
+            preparedStatement.setString(4,"aaaa@gmail.com");
+            preparedStatement.setString(5,"IT");
+            
+            preparedStatement.executeUpdate();
+            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(LAB9.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
